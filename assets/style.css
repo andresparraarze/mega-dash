@@ -1,0 +1,111 @@
+/*Impoorts*/
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap');
+
+/*variables*/
+:root{
+    --font-font-family: 'Noto Serif', serif;
+    --background-color-background: #222;
+    --second-background: #000000d0;
+    --back-i-background-image: url('https://source.unsplash.com/1600x900/?landscape');
+    --col-color: white;
+    --third-background: #7c7c7c2b;
+    --fourth-background: #7c7c7c6b;
+}
+
+/*Body*/
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: var(--font-font-family);
+    background: var(--background-color-background);
+    background-image: var(--back-i-background-image);
+    font-size: 120%;
+}
+
+/*card info*/
+.card {
+    background: var(--second-background);
+    color: var(--col-color);
+    padding: 3em;
+    border-radius: 35px;
+    width: 100%;
+    max-width: 430px;
+    margin: 2em;
+}
+
+/*search*/
+.search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+ 
+/*button*/
+button {
+    margin: 1em;
+    border-radius: 55%;
+    border: none;
+    height: 45px;
+    width: 45px;
+    outline: none;
+    background: var(--third-background);
+    color: var(--col-color);
+    cursor: pointer;
+    transition: 0.4s ease-in-out;
+}
+
+/*search bar*/
+input.search-bar {
+    border: none;
+    outline: none;
+    padding: 0.5em 2em;
+    border-radius: 26px;
+    background: var(--third-background);
+    color: var(--col-color);
+    font-size: 106%;
+    width: calc(100% - 100px);
+    font-family: var(--font-font-family);
+}
+
+/*hover*/
+button:hover {
+    background: var(--fourth-background);
+}
+
+/*Temperature settings*/
+h1.temp {
+    margin: 0;
+    margin-bottom: 0.4em;
+}
+
+/*Flex*/
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+/*Weather description*/
+.description {
+    text-transform: capitalize;
+    margin-left: 10px;
+}
+
+/*Weather during loading*/
+.weather.loading {
+    visibility: hidden;
+    max-height: 25px;
+    position: relative;
+}
+
+/*Weather after loading*/
+.weather.loading:after {
+    visibility: visible;
+    content: "Loading...";
+    color: var(--col-color);
+    position: absolute;
+    top: 0;
+    left: 22px;
+}
