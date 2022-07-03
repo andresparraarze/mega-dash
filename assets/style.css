@@ -15,7 +15,6 @@
 /*Body*/
 body {
     display: flex;
-    justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
@@ -25,16 +24,27 @@ body {
     font-size: 120%;
 }
 
-/*card info*/
+/*main card info*/
 .card {
+    justify-content: left;
     background: var(--second-background);
     color: var(--col-color);
-    padding: 3em;
+    padding: 1.5em;
     border-radius: 35px;
     width: 100%;
     max-width: 430px;
     margin: 2em;
 }
+
+/*remaining forecast cards*/
+.card2 {
+    color: var(--col-color);
+    background: var(--second-background);
+    padding: 1em;
+    justify-content: space-between;
+    border-radius: 35px;
+}
+
 
 /*search*/
 .search {
