@@ -19,6 +19,9 @@ Just run the html code or open the page through this link https://andresparraarz
 ## Usage
 Just write the name of the city where you want toget the weather information from as seen on the screenshot
 
+![Screenshot 2022-07-03 190905](https://user-images.githubusercontent.com/82328303/177060312-d9706080-6e05-4cb6-ac3c-0e8baee6cfbd.png)
+
+
 ## Contributing
 none yet
 
