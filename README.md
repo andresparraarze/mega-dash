@@ -14,10 +14,13 @@
 Weather dashboard which colects and displays data of the weather conditions on the day and gives a 5 day forecast 
 
 ## Installation
-Just run the html code or open the page through this link https://andresparraarze.github.io/mega-dash/
+1. Ensure Node.js is installed. (Running `npm install` is optional as there are no external dependencies.)
+2. Copy `.env.example` to `.env` and add your OpenWeather API key.
+3. Start the server with `npm start`.
+4. Open `http://localhost:3000` in your browser.
 
 ## Usage
-Just write the name of the city where you want toget the weather information from as seen on the screenshot
+Start the server and enter a city name in the search bar to retrieve the weather information.
 
 ![Screenshot 2022-07-03 190905](https://user-images.githubusercontent.com/82328303/177060312-d9706080-6e05-4cb6-ac3c-0e8baee6cfbd.png)
 
