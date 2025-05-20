@@ -21,6 +21,8 @@ body {
     font-family: var(--font-font-family);
     background: var(--background-color-background);
     background-image: var(--back-i-background-image);
+    background-size: cover;
+    background-position: center;
     font-size: 120%;
 }
 

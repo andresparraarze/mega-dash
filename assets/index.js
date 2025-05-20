@@ -54,7 +54,8 @@ let weather = {
         document.querySelector(".humidity").innerText = "Humidity: " + humidity + "%";
         document.querySelector(".wind").innerText = "Wind speed: " + speed + " km/h";
         document.querySelector(".weather").classList.remove("loading");
-        document.body.style.backgroundImage = "url('https://source.unsplash.com/1600x900/?" + name + "')";
+        document.body.style.backgroundImage =
+            "url('https://source.unsplash.com/1600x900/?" + encodeURIComponent(name) + "')";
 
 // 5 days weather card 1
         document.querySelector(".date2").innerText = month1 + "/" + day1 + "/" + year1;  
