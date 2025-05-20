@@ -23,12 +23,11 @@ let d5 = new Date();
 d5.setDate(d5.getDate()+5);
 const [month5, day5, year5] = [d5.getMonth() + 1, d5.getDate(), d5.getFullYear()];
 
-//Weather Key and API fetch for today
+//Fetch weather data from the server
 let weather = {
-apiKey: "37b31aa04e6b58aa1fe7f3e2b71cf214",
     fetchWeather: function (city) {
     fetch(
-    "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&appid=" + this.apiKey
+    "/weather?city=" + city
     )
     .then((response) => {
         if (!response.ok) {

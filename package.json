@@ -1,0 +1,10 @@
+{
+  "name": "mega-dash",
+  "version": "1.0.0",
+  "description": "Weather dashboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {}
+}
