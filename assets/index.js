@@ -39,6 +39,20 @@ let weather = {
         .then((data) => this.displayWeather(data));
     },
 
+    fetchWeatherByCoords: function (lat, lon) {
+    fetch(
+    `/weather?lat=${lat}&lon=${lon}`
+    )
+    .then((response) => {
+        if (!response.ok) {
+            alert("No weather found.");
+            throw new Error("No weather found.");
+        }
+            return response.json();
+        })
+        .then((data) => this.displayWeather(data));
+    },
+
 //Data retrieved and displayed from the API and the html for today
     displayWeather: function (data) {
         const { name } = data;
@@ -115,5 +129,16 @@ document
             weather.search();
             }
 });
-      
-weather.fetchWeather("Toronto");    
+
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            weather.fetchWeatherByCoords(position.coords.latitude, position.coords.longitude);
+        },
+        () => {
+            weather.fetchWeather("Toronto");
+        }
+    );
+} else {
+    weather.fetchWeather("Toronto");
+}

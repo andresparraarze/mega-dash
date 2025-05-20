@@ -50,9 +50,13 @@ function serveStatic(req, res) {
 
 async function handleWeather(req, res, urlObj) {
   const city = urlObj.searchParams.get('city');
-  if (!city) {
+  const lat = urlObj.searchParams.get('lat');
+  const lon = urlObj.searchParams.get('lon');
+  if (!city && !(lat && lon)) {
     res.writeHead(400, { 'Content-Type': 'application/json' });
-    return res.end(JSON.stringify({ error: 'City parameter is required' }));
+    return res.end(
+      JSON.stringify({ error: 'City or lat/lon parameters are required' })
+    );
   }
   const apiKey = process.env.API_KEY;
   if (!apiKey) {
@@ -60,7 +64,12 @@ async function handleWeather(req, res, urlObj) {
     return res.end(JSON.stringify({ error: 'API key not configured' }));
   }
   try {
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`;
+    let apiUrl;
+    if (lat && lon) {
+      apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&units=metric&appid=${apiKey}`;
+    } else {
+      apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`;
+    }
     const response = await fetch(apiUrl);
     if (!response.ok) {
       res.writeHead(response.status, { 'Content-Type': 'application/json' });
