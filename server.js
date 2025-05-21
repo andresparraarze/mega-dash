@@ -30,6 +30,36 @@ const mimeTypes = {
   '.json': 'application/json',
 };
 
+async function handlePhoto(req, res, urlObj) {
+  const query = urlObj.searchParams.get('query');
+  if (!query) {
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({ error: 'Query parameter is required' }));
+  }
+
+  const accessKey = process.env.UNSPLASH_ACCESS_KEY;
+  if (!accessKey) {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({ error: 'Unsplash access key not configured' }));
+  }
+
+  const apiUrl = `https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&client_id=${accessKey}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+      res.writeHead(response.status, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Error fetching image' }));
+    }
+    const data = await response.json();
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ url: data.urls && data.urls.regular }));
+  } catch (err) {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Internal server error' }));
+  }
+}
+
 function serveStatic(req, res) {
   let filePath = path.join(__dirname, req.url === '/' ? '/index.html' : req.url);
   if (!filePath.startsWith(__dirname)) {
@@ -88,6 +118,9 @@ const server = http.createServer((req, res) => {
   const urlObj = new URL(req.url, `http://${req.headers.host}`);
   if (urlObj.pathname === '/weather') {
     return handleWeather(req, res, urlObj);
+  }
+  if (urlObj.pathname === '/photo') {
+    return handlePhoto(req, res, urlObj);
   }
   serveStatic(req, res);
 });

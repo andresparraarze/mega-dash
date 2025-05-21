@@ -54,7 +54,7 @@ let weather = {
     },
 
 //Data retrieved and displayed from the API and the html for today
-    displayWeather: function (data) {
+    displayWeather: async function (data) {
         const { name } = data;
         const { icon } = data.weather[0];
         const { description } = data.weather[0];
@@ -68,8 +68,21 @@ let weather = {
         document.querySelector(".humidity").innerText = "Humidity: " + humidity + "%";
         document.querySelector(".wind").innerText = "Wind speed: " + speed + " km/h";
         document.querySelector(".weather").classList.remove("loading");
-        document.body.style.backgroundImage =
-            "url('https://source.unsplash.com/1600x900/?" + encodeURIComponent(name) + "')";
+        try {
+            const photoRes = await fetch(`/photo?query=${encodeURIComponent(name)}`);
+            if (photoRes.ok) {
+                const photoData = await photoRes.json();
+                if (photoData.url) {
+                    document.body.style.backgroundImage = `url('${photoData.url}')`;
+                }
+            } else {
+                document.body.style.backgroundImage =
+                    "url('https://source.unsplash.com/1600x900/?" + encodeURIComponent(name) + "')";
+            }
+        } catch (e) {
+            document.body.style.backgroundImage =
+                "url('https://source.unsplash.com/1600x900/?" + encodeURIComponent(name) + "')";
+        }
 
 // 5 days weather card 1
         document.querySelector(".date2").innerText = month1 + "/" + day1 + "/" + year1;  
