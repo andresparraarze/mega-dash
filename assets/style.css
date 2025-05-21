@@ -15,8 +15,10 @@
 /*Body*/
 body {
     display: flex;
-    align-items: center;
-    height: 100vh;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 100vh;
     margin: 0;
     font-family: var(--font-font-family);
     background: var(--background-color-background);
@@ -45,6 +47,9 @@ body {
     padding: 1em;
     justify-content: space-between;
     border-radius: 35px;
+    margin: 1em;
+    width: 100%;
+    max-width: 300px;
 }
 
 
@@ -134,4 +139,16 @@ h1.temp {
 }
 .attribution a {
     color: inherit;
+}
+
+@media (max-width: 600px) {
+    body {
+        flex-direction: column;
+        height: auto;
+    }
+    .card,
+    .card2 {
+        max-width: none;
+        width: calc(100% - 2em);
+    }
 }
