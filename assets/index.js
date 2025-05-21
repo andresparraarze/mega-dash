@@ -69,11 +69,14 @@ let weather = {
         document.querySelector(".wind").innerText = "Wind speed: " + speed + " km/h";
         document.querySelector(".weather").classList.remove("loading");
         try {
-            const photoRes = await fetch(`/photo?query=${encodeURIComponent(name)}`);
-            if (photoRes.ok) {
-                const photoData = await photoRes.json();
-                if (photoData.url) {
-                    document.body.style.backgroundImage = `url('${photoData.url}')`;
+            const condition = data.weather[0].main.toLowerCase();
+            const bgRes = await fetch(`/api/bg?condition=${encodeURIComponent(condition)}`);
+            if (bgRes.ok) {
+                const bgData = await bgRes.json();
+                if (bgData.url) {
+                    document.body.style.backgroundImage = `url('${bgData.url}')`;
+                    const attr = document.getElementById("attribution");
+                    if (attr) attr.innerHTML = bgData.attribution;
                 }
             } else {
                 document.body.style.backgroundImage =
