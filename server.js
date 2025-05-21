@@ -213,10 +213,49 @@ async function handleWeather(req, res, urlObj) {
   }
 }
 
+async function handleForecast(req, res, urlObj) {
+  const city = urlObj.searchParams.get('city');
+  const lat = urlObj.searchParams.get('lat');
+  const lon = urlObj.searchParams.get('lon');
+  if (!city && !(lat && lon)) {
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    return res.end(
+      JSON.stringify({ error: 'City or lat/lon parameters are required' })
+    );
+  }
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({ error: 'API key not configured' }));
+  }
+  try {
+    let apiUrl;
+    if (lat && lon) {
+      apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&units=metric&appid=${apiKey}`;
+    } else {
+      apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`;
+    }
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+      res.writeHead(response.status, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Error fetching forecast' }));
+    }
+    const data = await response.json();
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(data));
+  } catch (err) {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Internal server error' }));
+  }
+}
+
 const server = http.createServer((req, res) => {
   const urlObj = new URL(req.url, `http://${req.headers.host}`);
   if (urlObj.pathname === '/weather') {
     return handleWeather(req, res, urlObj);
+  }
+  if (urlObj.pathname === '/forecast') {
+    return handleForecast(req, res, urlObj);
   }
   if (urlObj.pathname === '/api/bg') {
     return handleBg(req, res, urlObj);
