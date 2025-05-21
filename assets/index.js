@@ -26,31 +26,57 @@ const [month5, day5, year5] = [d5.getMonth() + 1, d5.getDate(), d5.getFullYear()
 //Fetch weather data from the server
 let weather = {
     fetchWeather: function (city) {
-    fetch(
-    "/weather?city=" + city
-    )
-    .then((response) => {
-        if (!response.ok) {
-            alert("No weather found.");
-            throw new Error("No weather found.");
-        }
-            return response.json();
-        })
-        .then((data) => this.displayWeather(data));
+        fetch("/weather?city=" + city)
+            .then((response) => {
+                if (!response.ok) {
+                    alert("No weather found.");
+                    throw new Error("No weather found.");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                this.displayWeather(data);
+                this.fetchForecast(city);
+            });
     },
 
     fetchWeatherByCoords: function (lat, lon) {
-    fetch(
-    `/weather?lat=${lat}&lon=${lon}`
-    )
-    .then((response) => {
-        if (!response.ok) {
-            alert("No weather found.");
-            throw new Error("No weather found.");
-        }
-            return response.json();
-        })
-        .then((data) => this.displayWeather(data));
+        fetch(`/weather?lat=${lat}&lon=${lon}`)
+            .then((response) => {
+                if (!response.ok) {
+                    alert("No weather found.");
+                    throw new Error("No weather found.");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                this.displayWeather(data);
+                this.fetchForecastByCoords(lat, lon);
+            });
+    },
+
+    fetchForecast: function (city) {
+        fetch("/forecast?city=" + city)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("No forecast found.");
+                }
+                return response.json();
+            })
+            .then((data) => this.displayForecast(data))
+            .catch(() => {});
+    },
+
+    fetchForecastByCoords: function (lat, lon) {
+        fetch(`/forecast?lat=${lat}&lon=${lon}`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("No forecast found.");
+                }
+                return response.json();
+            })
+            .then((data) => this.displayForecast(data))
+            .catch(() => {});
     },
 
 //Data retrieved and displayed from the API and the html for today
@@ -86,48 +112,40 @@ let weather = {
             document.body.style.backgroundImage =
                 "url('https://source.unsplash.com/1600x900/?" + encodeURIComponent(name) + "')";
         }
+    },
 
-// 5 days weather card 1
-        document.querySelector(".date2").innerText = month1 + "/" + day1 + "/" + year1;  
-        document.querySelector(".icon2").src = "http://openweathermap.org/img/wn/" + icon + ".png";
-        document.querySelector(".description2").innerText = description;
-        document.querySelector(".temp2").innerText = temp + "°C";
-        document.querySelector(".wind2").innerText = "Wind speed: " + speed + " km/h";
-        document.querySelector(".humidity2").innerText = "Humidity: " + humidity + "%";
-
-// 5 days weather card 2
-      document.querySelector(".date3").innerText = month2 + "/" + day2 + "/" + year2;  
-      document.querySelector(".icon3").src = "http://openweathermap.org/img/wn/" + icon + ".png";
-      document.querySelector(".description3").innerText = description;
-      document.querySelector(".temp3").innerText = temp + "°C";
-      document.querySelector(".wind3").innerText = "Wind speed: " + speed + " km/h";
-      document.querySelector(".humidity3").innerText = "Humidity: " + humidity + "%";
-
-// 5 days weather card 3
-      document.querySelector(".date4").innerText = month3 + "/" + day3 + "/" + year3;  
-      document.querySelector(".icon4").src = "http://openweathermap.org/img/wn/" + icon + ".png";
-      document.querySelector(".description4").innerText = description;
-      document.querySelector(".temp4").innerText = temp + "°C";
-      document.querySelector(".wind4").innerText = "Wind speed: " + speed + " km/h";
-      document.querySelector(".humidity4").innerText = "Humidity: " + humidity + "%";
-
-// 5 days weather card 4
-      document.querySelector(".date5").innerText = month4 + "/" + day4 + "/" + year4;  
-      document.querySelector(".icon5").src = "http://openweathermap.org/img/wn/" + icon + ".png";
-      document.querySelector(".description5").innerText = description;
-      document.querySelector(".temp5").innerText = temp + "°C";
-      document.querySelector(".wind5").innerText = "Wind speed: " + speed + " km/h";
-      document.querySelector(".humidity5").innerText = "Humidity: " + humidity + "%";
-
-// 5 days weather card 5
-      document.querySelector(".date6").innerText = month5 + "/" + day5 + "/" + year5;  
-      document.querySelector(".icon6").src = "http://openweathermap.org/img/wn/" + icon + ".png";
-      document.querySelector(".description6").innerText = description;
-      document.querySelector(".temp6").innerText = temp + "°C";
-      document.querySelector(".wind6").innerText = "Wind speed: " + speed + " km/h";
-      document.querySelector(".humidity6").innerText = "Humidity: " + humidity + "%";
-      
-},
+    displayForecast: function (data) {
+        if (!data || !data.list) return;
+        const daily = {};
+        const today = new Date().toISOString().split("T")[0];
+        for (const entry of data.list) {
+            const [dateStr, time] = entry.dt_txt.split(" ");
+            if (dateStr === today) continue;
+            if (!daily[dateStr] || time === "12:00:00") {
+                daily[dateStr] = entry;
+            }
+        }
+        const dates = Object.keys(daily).sort().slice(0, 5);
+        dates.forEach((d, idx) => {
+            const forecast = daily[d];
+            const dateObj = new Date(forecast.dt_txt);
+            const m = dateObj.getMonth() + 1;
+            const day = dateObj.getDate();
+            const y = dateObj.getFullYear();
+            const icon = forecast.weather[0].icon;
+            const desc = forecast.weather[0].description;
+            const temp = forecast.main.temp;
+            const humidity = forecast.main.humidity;
+            const speed = forecast.wind.speed;
+            const i = idx + 2;
+            document.querySelector(`.date${i}`).innerText = `${m}/${day}/${y}`;
+            document.querySelector(`.icon${i}`).src = `http://openweathermap.org/img/wn/${icon}.png`;
+            document.querySelector(`.description${i}`).innerText = desc;
+            document.querySelector(`.temp${i}`).innerText = `${temp}°C`;
+            document.querySelector(`.wind${i}`).innerText = `Wind speed: ${speed} km/h`;
+            document.querySelector(`.humidity${i}`).innerText = `Humidity: ${humidity}%`;
+        });
+    },
     
 search: function () {
     this.fetchWeather(document.querySelector(".search-bar").value);
