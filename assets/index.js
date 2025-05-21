@@ -2,13 +2,7 @@
 const date = new Date();
 const [month, day, year] = [date.getMonth() + 1, date.getDate(), date.getFullYear()];
 
-// Future dates for the next five forecast cards
-const futureDates = [];
-for (let i = 1; i <= 5; i++) {
-    const d = new Date();
-    d.setDate(d.getDate() + i);
-    futureDates.push([d.getMonth() + 1, d.getDate(), d.getFullYear()]);
-}
+
 
 //Fetch weather data from the server
 let weather = {
@@ -115,7 +109,10 @@ let weather = {
         const dates = Object.keys(daily).sort().slice(0, 5);
         dates.forEach((d, idx) => {
             const forecast = daily[d];
-            const [mDisp, dayDisp, yDisp] = futureDates[idx];
+            const dateObj = new Date(forecast.dt * 1000);
+            const mDisp = dateObj.getMonth() + 1;
+            const dayDisp = dateObj.getDate();
+            const yDisp = dateObj.getFullYear();
             const icon = forecast.weather[0].icon;
             const desc = forecast.weather[0].description;
             const temp = forecast.main.temp;
