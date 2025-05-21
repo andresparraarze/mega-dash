@@ -15,7 +15,8 @@ Weather dashboard which colects and displays data of the weather conditions on t
 
 ## Installation
 1. Ensure Node.js is installed. (Running `npm install` is optional as there are no external dependencies.)
-2. Copy `.env.example` to `.env` and add your OpenWeather API key.
+2. Copy `.env.example` to `.env` and add your OpenWeather API key along with
+   your Unsplash access and secret keys.
 3. Start the server with `npm start`.
 4. Open `http://localhost:3000` in your browser.
 
