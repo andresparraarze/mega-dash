@@ -23,6 +23,10 @@ Weather dashboard which colects and displays data of the weather conditions on t
 ## Usage
 Start the server and enter a city name in the search bar to retrieve the weather information.
 
+The server provides `/api/bg?condition=<weather>` to fetch a matching Unsplash
+background image. It returns a JSON object with the image URL and attribution
+HTML, which the frontend uses for the page background.
+
 ![Screenshot 2022-07-03 190905](https://user-images.githubusercontent.com/82328303/177060312-d9706080-6e05-4cb6-ac3c-0e8baee6cfbd.png)
 
 

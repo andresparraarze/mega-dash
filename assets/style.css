@@ -121,3 +121,17 @@ h1.temp {
     top: 0;
     left: 22px;
 }
+
+.attribution {
+    position: fixed;
+    bottom: 4px;
+    right: 4px;
+    font-size: 0.75em;
+    color: var(--col-color);
+    background: var(--fourth-background);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+.attribution a {
+    color: inherit;
+}
